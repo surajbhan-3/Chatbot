@@ -1,0 +1,177 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat-bot</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        nav{
+            /* border: 1px solid black; */
+            height: auto;
+            width: 95%;
+            margin: auto;
+            background-image: url(https://images.pexels.com/photos/3947374/pexels-photo-3947374.jpeg?auto=compress&cs=tinysrgb&w=600);
+            border-radius: 12px;
+            
+
+        }
+        .logo{
+            border: 1px solid gray;
+            border-radius: 12px;
+            padding: 0px;
+            
+
+        }
+        .logo p{
+            font-size: 20px;
+            margin-left: 20px;
+            font-weight: 900;
+
+        }
+        .main-section{
+            border: 1px solid blue;
+            width: 70%;
+            margin: auto;
+            height: 600px;
+            margin-top: 30px;
+            background-image: url(https://images.pexels.com/photos/196655/pexels-photo-196655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
+
+
+        }
+        .chat-container{
+            border: 1px solid green;
+            height: 300px;
+            border-radius: 12px;
+            margin: 0px 50px 10px 50px;
+            background-color: white;
+        }
+        .inputChat{
+            border: 1px solid green;
+            height: auto;
+            margin: 10px 50px 10px 50px;
+            border-radius: 6px;
+            padding: 5px;
+            background-color: white;
+            
+
+
+
+        }
+        input{
+            width: 91%;
+            font-size: 20px;
+             border: 0;
+            outline: none;
+            
+
+        }
+        button{
+            font-size: 20px;
+            padding: 2px 10px 2px 10px;
+            margin-left: 0px;
+            border-radius: 6px;
+            outline: none;
+            border: 1px solid gray;
+            background-color: rgb(29, 190, 29);
+            color: white;
+
+
+        }
+        .user-message{
+            border: 0;
+            outline: none;
+            width: auto;
+            color: white;
+            border-radius: 6px;
+            background-color: rgb(70, 136, 158);
+            float: right;
+            word-wrap: break-word;
+            padding: 10px;
+            max-width: 60%;
+            clear: both;
+        }
+ .chatbot-message {
+    background-color: #2ecc71;
+    color: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    clear: both;
+    float: left;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+.chat-data{
+    padding: 10px;
+    border-radius: 12px;
+
+}
+
+.message-theme{
+    margin-top:10px;
+  font-size: 20px;
+ text-align: center;    
+}
+    </style>
+</head>
+
+<body>
+
+
+   <nav>
+      <div class="logo">
+        <p>Chat-bot</p>
+      </div>
+   </nav>
+    
+   <div class="main-section">
+           <div class="chat-form-wrapper">
+            <p class="message-theme">Welcome to chatbot</p>
+                    <div class="chat-container">
+                           <div class="chat-data" id="chat-data">
+                            <!-- All the chats related to user will be displayed here  -->
+
+                           </div>
+                          
+                    </div>
+
+                    <div class="inputChat">
+                        <input type="text" id="user-input" placeholder="Write your message">
+                        <button onclick="sendMessage()">Send</button>
+                    </div>
+           </div>
+   </div>
+
+
+   <script>
+    function sendMessage() {
+        const userMessage = document.getElementById("user-input").value;
+        const chatData = document.getElementById("chat-data");
+
+        // Display the user message in the chat history
+        chatData.innerHTML += `<div class="user-message">${userMessage}</div>`;
+
+        // Send the user message to the server for processing
+        fetch("/chat", {
+            method: "POST",
+            body: new URLSearchParams({ user_input: userMessage }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display the chatbot's response in the chat history
+            chatData.innerHTML += `<div class="chatbot-message">${data.chatbot_response}</div>`;
+        });
+
+        // Clear the user input field
+        document.getElementById("user-input").value = "";
+    }
+</script>
+
+</body>
+</html>
